@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-LOG_FILE = "/var/log/lumen-installer.log"
+LOG_FILE = "lumen-installer.log"
 
 def setup_logger():
     Path("/var/log").mkdir(parents=True, exist_ok=True)
