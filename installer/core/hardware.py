@@ -6,7 +6,17 @@ def detect_hardware():
     hardware_info = {}
 
 # CPU information
-    hardware_info["cpu"] = platform.processor()
+try:
+    cpu = subprocess.check_output(
+        "lscpu | grep 'Model name'",
+        shell=True
+    ).decode().strip()
+
+    cpu = cpu.split(":")[1].strip()
+except Exception:
+    cpu = "Unknown"
+
+hardware_info["cpu"] = cpu
 
 # Architecture
     hardware_info["architecture"] = platform.machine()
