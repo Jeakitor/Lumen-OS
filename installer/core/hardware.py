@@ -5,23 +5,23 @@ from installer.core.logger import log
 def detect_hardware():
     hardware_info = {}
 
-# CPU information
-try:
-    cpu = subprocess.check_output(
-        "lscpu | grep 'Model name'",
-        shell=True
-    ).decode().strip()
+    # CPU information
+    try:
+        cpu = subprocess.check_output(
+            "lscpu | grep 'Model name'",
+            shell=True
+        ).decode().strip()
 
-    cpu = cpu.split(":")[1].strip()
-except Exception:
-    cpu = "Unknown"
+        cpu = cpu.split(":")[1].strip()
+    except Exception:
+        cpu = "Unknown"
 
-hardware_info["cpu"] = cpu
+    hardware_info["cpu"] = cpu
 
-# Architecture
+    # Architecture
     hardware_info["architecture"] = platform.machine()
 
-# RAM (in MB)
+    # RAM (in MB)
     try:
         mem_kb = int(subprocess.check_output(
             ["grep", "MemTotal", "/proc/meminfo"]
