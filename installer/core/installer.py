@@ -1,6 +1,7 @@
 from installer.core.logger import setup_logger, log
 from installer.core.hardware import detect_hardware
-from installer.core.profiles import recommend_profile
+#3
+from installer.core.packages import PACKAGE_MAP
 
 def choose_profile():
     print("\nChoose installation profile:")
@@ -96,12 +97,18 @@ def simulate_install(profile, de, apps):
     if apps:
         print("Installing selected applications:")
         for app in apps:
-            print(f" - {app}")
+            data = PACKAGE_MAP.get(app)
+
+            if data:
+                pkg = data["package"]
+                src = data["source"]
+                print(f" - Installing {pkg} via {src}")
+            else:
+                print(f" - Unknown app: {app}")
     else:
         print("No additional applications selected")
 
     print("\nInstallation simulation complete.")
-
 #
 
 def main():
