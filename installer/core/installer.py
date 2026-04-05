@@ -73,6 +73,37 @@ def choose_apps():
         return selected
 
 #
+def simulate_install(profile, de, apps):
+    print("\n=== Installation Plan ===")
+
+    # Base system
+    print("Installing base system...")
+
+    # Profile handling
+    if profile == "minimal":
+        print("Minimal setup: no extra packages")
+
+    # Desktop Environment
+    if de:
+        if de == "xfce":
+            print("Installing XFCE desktop...")
+        elif de == "kde":
+            print("Installing KDE desktop...")
+        elif de == "gnome":
+            print("Installing GNOME desktop...")
+
+    # Applications
+    if apps:
+        print("Installing selected applications:")
+        for app in apps:
+            print(f" - {app}")
+    else:
+        print("No additional applications selected")
+
+    print("\nInstallation simulation complete.")
+
+#
+
 def main():
     setup_logger()
     log("Installer started")
@@ -100,6 +131,10 @@ def main():
     print(f"Apps: {apps}")
 
     log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
+
+    #
+    simulate_install(profile, de, apps)
+    #
   
 if __name__ == "__main__":
     main()
