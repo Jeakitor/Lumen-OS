@@ -70,27 +70,27 @@ def detect_hardware():
     
         #APP SEL KINDA BROKEN RN
         def choose_apps():
-        print("\nSelect applications to install:")
+            print("\nSelect applications to install:")
+            
+            apps = {
+                "1": "browser",
+                "2": "code_editor",
+                "3": "media_player",
+                "4": "office_tools",
+                "5": "git"
+            }
         
-        apps = {
-            "1": "browser",
-            "2": "code_editor",
-            "3": "media_player",
-            "4": "office_tools",
-            "5": "git"
-        }
-    
-        print("1. Web Browser")
-        print("2. Code Editor")
-        print("3. Media Player")
-        print("4. Office Tools")
-        print("5. Git / Dev Tools")
-    
-        selected = input("Enter choices (e.g. 1 3 5): ").split()
-    
-        chosen_apps = [apps[i] for i in selected if i in apps]
-    
-        return chosen_apps
+            print("1. Web Browser")
+            print("2. Code Editor")
+            print("3. Media Player")
+            print("4. Office Tools")
+            print("5. Git / Dev Tools")
+        
+            selected = input("Enter choices (e.g. 1 3 5): ").split()
+        
+            chosen_apps = [apps[i] for i in selected if i in apps]
+        
+            return chosen_apps
 
     #
 
