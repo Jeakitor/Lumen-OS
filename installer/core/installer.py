@@ -9,6 +9,7 @@ def main():
 
     hardware = detect_hardware()
 
+    print("\n=== Detected Hardware ===")
     for key, value in hardware.items():
         print(f"{key.upper()}: {value}")
 
@@ -25,11 +26,8 @@ def main():
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
-    print("\n=== Detected Hardware ===\n")
-    
-    for key, value in hardware.items():
-        print(f"{key.upper()}: {value}")
 
+    log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
   
 if __name__ == "__main__":
     main()
