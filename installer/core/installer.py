@@ -9,19 +9,27 @@ def main():
 
     hardware = detect_hardware()
 
-    print("\n=== Detected Hardware ===\n")
     for key, value in hardware.items():
         print(f"{key.upper()}: {value}")
 
-    profile = recommend_profile(hardware)
-
-    if not profile:
-        print("No suitable profile found. Falling back to default.")
-        profile = "minimal"
-
-    print("\n------------------------------")
-    print(f"Recommended installation profile: {profile}")
-    log(f"Profile selected: {profile}")
+    profile = choose_profile()
     
+    if profile == "minimal":
+        de = None
+        apps = []
+    else:
+        de = choose_de()
+        apps = choose_apps()
+
+    print("\n=== Installation Summary ===")
+    print(f"Profile: {profile}")
+    print(f"Desktop Environment: {de}")
+    print(f"Apps: {apps}")
+    print("\n=== Detected Hardware ===\n")
+    
+    for key, value in hardware.items():
+        print(f"{key.upper()}: {value}")
+
+  
 if __name__ == "__main__":
     main()
