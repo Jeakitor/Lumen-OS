@@ -1,10 +1,13 @@
 def recommend_profile(hardware):
-    ram = hardware.get("ram_mb")
+  def recommend_profile(hardware):
+    ram = hardware.get("ram_mb", 0)
 
-    if ram is None:
-        return "standard"
+    # Base assumption: OS is already optimized
+    # Profile only controls extras
 
     if ram < 4096:
-        return "low_spec"
-    else:
+        return "minimal"
+    elif ram < 8000:
         return "standard"
+    else:
+        return "standard"  # still standard by default
