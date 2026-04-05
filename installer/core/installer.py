@@ -107,18 +107,18 @@ def simulate_install(profile, de, apps):
 
     # Applications
     if apps:
-        print("Installing selected applications:")
-        for app in apps:
-            data = PACKAGE_MAP.get(app)
+    print("Installing selected applications:")
+    for app in apps:
+        data = PACKAGE_MAP.get(app)
 
-            if data:
-                pkg = data["package"]
-                src = data["source"]
-                print(f" - Installing {pkg} via {src}")
-            else:
-                print(f" - Unknown app: {app}")
-    else:
-        print("No additional applications selected")
+        if data:
+            pkg = data["package"]
+            src = data["source"]
+            cmd = get_install_command(pkg, src)
+
+            print(f" - {cmd}")
+        else:
+            print(f" - Unknown app: {app}")
 
     print("\nInstallation simulation complete.")
 #
