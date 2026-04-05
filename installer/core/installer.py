@@ -73,6 +73,18 @@ def choose_apps():
     else:
         return selected
 
+def get_install_command(pkg, source):
+    if source == "pacman":
+        return f"sudo pacman -S --noconfirm {pkg}"
+    elif source == "aur":
+        return f"yay -S --noconfirm {pkg}"
+    elif source == "flatpak":
+        return f"flatpak install -y flathub {pkg}"
+    else:
+        return f"# Unknown source for {pkg}"
+
+
+
 #
 def simulate_install(profile, de, apps):
     print("\n=== Installation Plan ===")
