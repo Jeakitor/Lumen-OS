@@ -1,8 +1,6 @@
 from installer.core.logger import setup_logger, log
 from installer.core.hardware import detect_hardware
 #3
-from installer.core.packages import PACKAGE_MAP
-#
 import subprocess
 #
 from installer.core.packages import PACKAGE_MAP, DE_PACKAGES
@@ -74,13 +72,13 @@ def choose_apps():
 
     if not selected:
         print("No apps selected.")
-        return[]
+        return []
     else:
         return selected
 
 def get_install_command(pkg, source):
     if source == "pacman":
-        return f"sudo pacman -S --noconfirm {pkg}"
+        return f"sudo pacman -S --needed --noconfirm {pkg}"
     elif source == "aur":
         return f"yay -S --noconfirm {pkg}"
     elif source == "flatpak":
@@ -89,7 +87,6 @@ def get_install_command(pkg, source):
         return f"# Unknown source for {pkg}"
 
 #
-mode = input("\nChoose mode:\n1. Simulate\n2. Execute\nEnter choice: ").strip()
 #
 def simulate_install(profile, de, apps, execute=False):
     print("\n=== Installation Plan ===")
@@ -103,12 +100,13 @@ def simulate_install(profile, de, apps, execute=False):
 
     # Desktop Environment
     if de:
-        if de == "xfce":
-            print("Installing XFCE desktop...")
-        elif de == "kde":
-            print("Installing KDE desktop...")
-        elif de == "gnome":
-            print("Installing GNOME desktop...")
+    pkg = DE_PACKAGES.get(de)
+    if pkg:
+        cmd = f"sudo pacman -S --needed --noconfirm {pkg}"
+        if execute:
+            subprocess.run(cmd, shell=True)
+        else:
+            print(f" - {cmd}")
 
     # Applications
     # Applications
