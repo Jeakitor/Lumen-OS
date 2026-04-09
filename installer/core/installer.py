@@ -2,6 +2,9 @@ from installer.core.logger import setup_logger, log
 from installer.core.hardware import detect_hardware
 #3
 from installer.core.packages import PACKAGE_MAP
+#
+import subprocess
+
 
 def choose_profile():
     print("\nChoose installation profile:")
@@ -83,10 +86,10 @@ def get_install_command(pkg, source):
     else:
         return f"# Unknown source for {pkg}"
 
-
-
 #
-def simulate_install(profile, de, apps):
+mode = input("\nChoose mode:\n1. Simulate\n2. Execute\nEnter choice: ").strip()
+#
+def simulate_install(profile, de, apps, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
@@ -107,20 +110,23 @@ def simulate_install(profile, de, apps):
 
     # Applications
     if apps:
-        print("Installing selected applications:")
-        for app in apps:
-            data = PACKAGE_MAP.get(app)
-    
-            if data:
-                pkg = data["package"]
-                src = data["source"]
-                cmd = get_install_command(pkg, src)
-    
-                print(f" - {cmd}")
+    print("Installing selected applications:")
+    for app in apps:
+        data = PACKAGE_MAP.get(app)
+
+        if data:
+            pkg = data["package"]
+            src = data["source"]
+            cmd = get_install_command(pkg, src)
+
+            if execute:
+                subprocess.run(cmd, shell=True)
             else:
-                print(f" - Unknown app: {app}")
-    
-        print("\nInstallation simulation complete.")
+                print(f" - {cmd}")
+        else:
+            print(f" - Unknown app: {app}")
+else:
+    print("No additional applications selected")
 #
 
 def main():
@@ -152,7 +158,20 @@ def main():
     log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
 
     #
-    simulate_install(profile, de, apps)
+    print("\nChoose installation mode:")
+    print("1. Simulate (safe)")
+    print("2. Execute (experimental)")
+    
+    mode = input("Enter choice (1-2): ").strip()
+    
+    if mode == "2":
+        confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
+        if confirm == "y":
+            simulate_install(profile, de, apps, execute=True)
+        else:
+            print("Execution cancelled.")
+    else:    
+        simulate_install(profile, de, apps, execute=False)
     #
   
 if __name__ == "__main__":
