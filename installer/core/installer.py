@@ -4,6 +4,8 @@ from installer.core.hardware import detect_hardware
 from installer.core.packages import PACKAGE_MAP
 #
 import subprocess
+#
+from installer.core.packages import PACKAGE_MAP, DE_PACKAGES
 
 
 def choose_profile():
@@ -156,6 +158,27 @@ def main():
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
 
+
+    ###
+    print("\n=== Commands to be executed ===")
+    
+    # Preview DE install
+    if de:
+        from installer.core.packages import DE_PACKAGES
+        pkg = DE_PACKAGES.get(de)
+        if pkg:
+            print(f"sudo pacman -S --needed --noconfirm {pkg}")
+    
+    # Preview app installs
+    for app in apps:
+        data = PACKAGE_MAP.get(app)
+        if data:
+            cmd = get_install_command(data["package"], data["source"])
+            print(cmd)
+
+    ###
+
+    
     log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
 
     #
@@ -164,7 +187,7 @@ def main():
     print("2. Execute (experimental)")
     
     mode = input("Enter choice (1-2): ").strip()
-    
+        
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
