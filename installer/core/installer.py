@@ -100,15 +100,14 @@ def simulate_install(profile, de, apps, execute=False):
 
     # Desktop Environment
     if de:
-    pkg = DE_PACKAGES.get(de)
-    if pkg:
-        cmd = f"sudo pacman -S --needed --noconfirm {pkg}"
-        if execute:
-            subprocess.run(cmd, shell=True)
-        else:
-            print(f" - {cmd}")
-
-    # Applications
+        pkg = DE_PACKAGES.get(de)
+        if pkg:
+            cmd = f"sudo pacman -S --needed --noconfirm {pkg}"
+    
+            if execute:
+                subprocess.run(cmd, shell=True)
+            else:
+                print(f" - {cmd}")
     # Applications
     if apps:
         print("Installing selected applications:")
