@@ -20,3 +20,8 @@ PACKAGE_MAP = {
         "source": "pacman"
     }
 }
+DE_PACKAGES = {
+    "xfce": "xfce4 xfce4-goodies",
+    "kde": "plasma kde-applications",
+    "gnome": "gnome"
+}
