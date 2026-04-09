@@ -109,24 +109,25 @@ def simulate_install(profile, de, apps, execute=False):
             print("Installing GNOME desktop...")
 
     # Applications
+    # Applications
     if apps:
-    print("Installing selected applications:")
-    for app in apps:
-        data = PACKAGE_MAP.get(app)
-
-        if data:
-            pkg = data["package"]
-            src = data["source"]
-            cmd = get_install_command(pkg, src)
-
-            if execute:
-                subprocess.run(cmd, shell=True)
+        print("Installing selected applications:")
+        for app in apps:
+            data = PACKAGE_MAP.get(app)
+    
+            if data:
+                pkg = data["package"]
+                src = data["source"]
+                cmd = get_install_command(pkg, src)
+    
+                if execute:
+                    subprocess.run(cmd, shell=True)
+                else:
+                    print(f" - {cmd}")
             else:
-                print(f" - {cmd}")
-        else:
-            print(f" - Unknown app: {app}")
-else:
-    print("No additional applications selected")
+                print(f" - Unknown app: {app}")
+    else:
+        print("No additional applications selected")
 #
 
 def main():
