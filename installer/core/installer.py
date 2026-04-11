@@ -4,6 +4,8 @@ from installer.core.hardware import detect_hardware
 import subprocess
 #
 from installer.core.packages import PACKAGE_MAP, DE_PACKAGES
+import getpass
+
 
 
 def choose_profile():
@@ -82,8 +84,8 @@ def create_user():
     username = input("Enter username: ").strip()
 
     while True:
-        password = input("Enter password: ").strip()
-        confirm = input("Confirm password: ").strip()
+        password = getpass.getpass("Enter password: ").strip()
+        confirm = getpass.getpass("Confirm password: ").strip()
 
         if password == confirm:
             break
