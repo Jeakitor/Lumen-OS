@@ -76,6 +76,9 @@ def choose_apps():
     else:
         return selected
 
+def create_user()
+
+
 def get_install_command(pkg, source):
     if source == "pacman":
         return f"sudo pacman -S --needed --noconfirm {pkg}"
