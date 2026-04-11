@@ -1,6 +1,12 @@
 from installer.core.logger import setup_logger, log
 from installer.core.hardware import detect_hardware
-from installer.core.profiles import recommend_profile
+#3
+import subprocess
+#
+from installer.core.packages import PACKAGE_MAP, DE_PACKAGES
+import getpass
+
+
 
 def choose_profile():
     print("\nChoose installation profile:")
@@ -68,40 +74,95 @@ def choose_apps():
 
     if not selected:
         print("No apps selected.")
-        return[]
+        return []
     else:
         return selected
 
+def create_user():
+    print("\n=== User Setup ===")
+
+    username = input("Enter username: ").strip()
+
+    while True:
+        password = getpass.getpass("Enter password: ").strip()
+        confirm = getpass.getpass("Confirm password: ").strip()
+
+        if password == confirm:
+            break
+        else:
+            print("Passwords do not match. Try again.")
+
+    print("\nUser type:")
+    print("1. Student (restricted)")
+    print("2. Admin (full access)")
+
+    choice = input("Choose user type (1-2): ").strip()
+    user_type = "admin" if choice == "2" else "student"
+
+    return {
+        "username": username,
+        "password": password,
+        "type": user_type
+    }
+
+
+
+def get_install_command(pkg, source):
+    if source == "pacman":
+        return f"sudo pacman -S --needed --noconfirm {pkg}"
+    elif source == "aur":
+        return f"yay -S --noconfirm {pkg}"
+    elif source == "flatpak":
+        return f"flatpak install -y flathub {pkg}"
+    else:
+        return f"# Unknown source for {pkg}"
+
 #
-def simulate_install(profile, de, apps):
+#
+def simulate_install(profile, de, apps, user, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
     print("Installing base system...")
 
+    #USERS
+    print(f"Creating user: {user['username']}")
+    print(f"User type: {user['type']}")
+    #
+    
     # Profile handling
     if profile == "minimal":
         print("Minimal setup: no extra packages")
 
     # Desktop Environment
     if de:
-        if de == "xfce":
-            print("Installing XFCE desktop...")
-        elif de == "kde":
-            print("Installing KDE desktop...")
-        elif de == "gnome":
-            print("Installing GNOME desktop...")
-
+        pkg = DE_PACKAGES.get(de)
+        if pkg:
+            cmd = f"sudo pacman -S --needed --noconfirm {pkg}"
+    
+            if execute:
+                subprocess.run(cmd, shell=True)
+            else:
+                print(f" - {cmd}")
     # Applications
     if apps:
         print("Installing selected applications:")
         for app in apps:
-            print(f" - {app}")
+            data = PACKAGE_MAP.get(app)
+    
+            if data:
+                pkg = data["package"]
+                src = data["source"]
+                cmd = get_install_command(pkg, src)
+    
+                if execute:
+                    subprocess.run(cmd, shell=True)
+                else:
+                    print(f" - {cmd}")
+            else:
+                print(f" - Unknown app: {app}")
     else:
         print("No additional applications selected")
-
-    print("\nInstallation simulation complete.")
-
 #
 
 def main():
@@ -123,17 +184,54 @@ def main():
     else:
         de = choose_de()
         apps = choose_apps()
-
+    
+    user = create_user()
+        
     print("\n------------------------------")
     print("\n=== Installation Summary ===")
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
+    print(f"User: {user['username']} ({user['type']})")
 
+
+    ###
+    print("\n=== Commands to be executed ===")
+    
+    # Preview DE install
+    if de:
+        from installer.core.packages import DE_PACKAGES
+        pkg = DE_PACKAGES.get(de)
+        if pkg:
+            print(f"sudo pacman -S --needed --noconfirm {pkg}")
+    
+    # Preview app installs
+    for app in apps:
+        data = PACKAGE_MAP.get(app)
+        if data:
+            cmd = get_install_command(data["package"], data["source"])
+            print(cmd)
+
+    ###
+
+    
     log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
 
     #
-    simulate_install(profile, de, apps)
+    print("\nChoose installation mode:")
+    print("1. Simulate (safe)")
+    print("2. Execute (experimental)")
+    
+    mode = input("Enter choice (1-2): ").strip()
+        
+    if mode == "2":
+        confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
+        if confirm == "y":
+            simulate_install(profile, de, apps, user, execute=True)
+        else:
+            print("Execution cancelled.")
+    else:    
+        simulate_install(profile, de, apps, user, execute=False)
     #
   
 if __name__ == "__main__":
