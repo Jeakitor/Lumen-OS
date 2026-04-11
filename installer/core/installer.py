@@ -104,7 +104,14 @@ def create_user():
         "password": password,
         "type": user_type
     }
+###
+def choose_timezone():
+    print("\n=== Timezone Setup ===")
+    print("Example: Asia/Kolkata, Europe/London, America/New_York")
 
+    timezone = input("Enter your timezone: ").strip()
+
+    return timezone
 
 
 def get_install_command(pkg, source):
@@ -119,7 +126,7 @@ def get_install_command(pkg, source):
 
 #
 #
-def simulate_install(profile, de, apps, user, execute=False):
+def simulate_install(profile, de, apps, user, timezone, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
@@ -129,6 +136,8 @@ def simulate_install(profile, de, apps, user, execute=False):
     print(f"Creating user: {user['username']}")
     print(f"User type: {user['type']}")
     #
+
+    print(f"Setting timezone: {timezone}")            
     
     # Profile handling
     if profile == "minimal":
@@ -186,6 +195,7 @@ def main():
         apps = choose_apps()
     
     user = create_user()
+    timezone = choose_timezone()
         
     print("\n------------------------------")
     print("\n=== Installation Summary ===")
@@ -193,7 +203,7 @@ def main():
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
     print(f"User: {user['username']} ({user['type']})")
-
+    print(f"Timezone: {timezone}")
 
     ###
     print("\n=== Commands to be executed ===")
@@ -227,11 +237,11 @@ def main():
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
-            simulate_install(profile, de, apps, user, execute=True)
+            simulate_install(profile, de, apps, user, timezone, execute=True)
         else:
             print("Execution cancelled.")
     else:    
-        simulate_install(profile, de, apps, user, execute=False)
+        simulate_install(profile, de, apps, user, timezone, execute=False)
     #
   
 if __name__ == "__main__":
