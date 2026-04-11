@@ -76,7 +76,33 @@ def choose_apps():
     else:
         return selected
 
-def create_user()
+def create_user():
+    print("\n=== User Setup ===")
+
+    username = input("Enter username: ").strip()
+
+    while True:
+        password = input("Enter password: ").strip()
+        confirm = input("Confirm password: ").strip()
+
+        if password == confirm:
+            break
+        else:
+            print("Passwords do not match. Try again.")
+
+    print("\nUser type:")
+    print("1. Student (restricted)")
+    print("2. Admin (full access)")
+
+    choice = input("Choose user type (1-2): ").strip()
+    user_type = "admin" if choice == "2" else "student"
+
+    return {
+        "username": username,
+        "password": password,
+        "type": user_type
+    }
+
 
 
 def get_install_command(pkg, source):
@@ -91,12 +117,17 @@ def get_install_command(pkg, source):
 
 #
 #
-def simulate_install(profile, de, apps, execute=False):
+def simulate_install(profile, de, apps, user, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
     print("Installing base system...")
 
+    #USERS
+    print(f"Creating user: {user['username']}")
+    print(f"User type: {user['type']}")
+    #
+    
     # Profile handling
     if profile == "minimal":
         print("Minimal setup: no extra packages")
@@ -151,12 +182,15 @@ def main():
     else:
         de = choose_de()
         apps = choose_apps()
-
+    
+    user = create_user()
+        
     print("\n------------------------------")
     print("\n=== Installation Summary ===")
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
+    print(f"User: {user['username']} ({user['type']})")
 
 
     ###
@@ -191,11 +225,11 @@ def main():
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
-            simulate_install(profile, de, apps, execute=True)
+            simulate_install(profile, de, apps, user, execute=True)
         else:
             print("Execution cancelled.")
     else:    
-        simulate_install(profile, de, apps, execute=False)
+        simulate_install(profile, de, apps, user, execute=False)
     #
   
 if __name__ == "__main__":
