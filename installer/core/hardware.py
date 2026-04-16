@@ -29,5 +29,5 @@ def detect_hardware():
         hardware_info["ram_mb"] = mem_kb // 1024
     except Exception:
         hardware_info["ram_mb"] = None
-
+    return hardware_info
     
