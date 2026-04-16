@@ -295,12 +295,11 @@ def main():
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
-            simulate_install(profile, de, apps, user, timezone, execute=True)
+            simulate_install(profile, de, apps, user, timezone, keyboard, execute=True)
         else:
             print("Execution cancelled.")
     else:    
-        simulate_install(profile, de, apps, user, timezone, execute=False)
-    #
+        simulate_install(profile, de, apps, user, timezone, keyboard, execute=False)    #
   
 if __name__ == "__main__":
     main()
