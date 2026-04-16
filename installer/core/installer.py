@@ -78,32 +78,6 @@ def choose_apps():
     else:
         return selected
 
-def create_user():
-    print("\n=== User Setup ===")
-
-    username = input("Enter username: ").strip()
-
-    while True:
-        password = getpass.getpass("Enter password: ").strip()
-        confirm = getpass.getpass("Confirm password: ").strip()
-
-        if password == confirm:
-            break
-        else:
-            print("Passwords do not match. Try again.")
-
-    print("\nUser type:")
-    print("1. Student (restricted)")
-    print("2. Admin (full access)")
-
-    choice = input("Choose user type (1-2): ").strip()
-    user_type = "admin" if choice == "2" else "student"
-
-    return {
-        "username": username,
-        "password": password,
-        "type": user_type
-    }
 ###
 def choose_timezone():
     print("\n=== Timezone Setup ===")
@@ -140,6 +114,57 @@ def choose_timezone():
         print("Invalid choice. Defaulting to Asia/Kolkata.")
         return "Asia/Kolkata"
 
+def choose_keyboard():
+    print("\n=== Keyboard Layout Setup ===")
+
+    print("Common options:")
+    print("1. us")
+    print("2. uk")
+    print("3. in")
+    print("4. Custom")
+
+    choice = input("Choose option (1-4): ").strip()
+
+    if choice == "1":
+        return "us"
+    elif choice == "2":
+        return "uk"
+    elif choice == "3":
+        return "in"
+    elif choice == "4":
+        return input("Enter custom layout (e.g. de, fr): ").strip()
+    else:
+        print("Invalid choice. Defaulting to 'us'")
+        return "us"
+
+def create_user():
+    print("\n=== User Setup ===")
+
+    username = input("Enter username: ").strip()
+
+    while True:
+        password = getpass.getpass("Enter password: ").strip()
+        confirm = getpass.getpass("Confirm password: ").strip()
+
+        if password == confirm:
+            break
+        else:
+            print("Passwords do not match. Try again.")
+
+    print("\nUser type:")
+    print("1. Student (restricted)")
+    print("2. Admin (full access)")
+
+    choice = input("Choose user type (1-2): ").strip()
+    user_type = "admin" if choice == "2" else "student"
+
+    return {
+        "username": username,
+        "password": password,
+        "type": user_type
+    }
+
+###
 def get_install_command(pkg, source):
     if source == "pacman":
         return f"sudo pacman -S --needed --noconfirm {pkg}"
@@ -152,7 +177,7 @@ def get_install_command(pkg, source):
 
 #
 #
-def simulate_install(profile, de, apps, user, timezone, execute=False):
+def simulate_install(profile, de, apps, user, timezone, keyboard, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
@@ -162,8 +187,9 @@ def simulate_install(profile, de, apps, user, timezone, execute=False):
     print(f"Creating user: {user['username']}")
     print(f"User type: {user['type']}")
     #
-
+    
     print(f"Setting timezone: {timezone}")            
+    print(f"Setting keyboard layout: {keyboard}")
     
     # Profile handling
     if profile == "minimal":
@@ -220,23 +246,29 @@ def main():
         de = choose_de()
         apps = choose_apps()
     
-    user = create_user()
     timezone = choose_timezone()
+    keyboard = choose_keyboard()
+    user = create_user()
         
     print("\n------------------------------")
     print("\n=== Installation Summary ===")
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
-    print(f"User: {user['username']} ({user['type']})")
+    print(f"Keyboard: {keyboard}")
     print(f"Timezone: {timezone}")
+    print(f"User: {user['username']} ({user['type']})")
+
 
     ###
     print("\n=== Commands to be executed ===")
+
+    #KEYBOARD FIX TIME ADD
+    print(f"timedatectl set-timezone {timezone}")
+    print(f"loadkeys {keyboard}")
     
     # Preview DE install
     if de:
-        from installer.core.packages import DE_PACKAGES
         pkg = DE_PACKAGES.get(de)
         if pkg:
             print(f"sudo pacman -S --needed --noconfirm {pkg}")
