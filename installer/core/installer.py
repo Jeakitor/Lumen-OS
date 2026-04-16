@@ -78,6 +78,65 @@ def choose_apps():
     else:
         return selected
 
+###
+def choose_timezone():
+    print("\n=== Timezone Setup ===")
+
+    print("Common options:")
+    print("1. Asia/Kolkata")
+    print("2. Europe/London")
+    print("3. America/New_York")
+    print("4. Custom")
+
+    choice = input("Choose option (1-4): ").strip()
+
+    if choice == "1":
+        return "Asia/Kolkata"
+    elif choice == "2":
+        return "Europe/London"
+    elif choice == "3":
+        return "America/New_York"
+    elif choice == "4":
+        # Valid input
+        zones = subprocess.check_output(
+            "timedatectl list-timezones",
+            shell=True
+        ).decode().split("\n")
+
+        while True:
+            tz = input("Enter custom timezone: ").strip()
+
+            if tz in zones:
+                return tz
+            else:
+                print("Invalid timezone. Try again.")
+    else:
+        print("Invalid choice. Defaulting to Asia/Kolkata.")
+        return "Asia/Kolkata"
+
+def choose_keyboard():
+    print("\n=== Keyboard Layout Setup ===")
+
+    print("Common options:")
+    print("1. us")
+    print("2. uk")
+    print("3. in")
+    print("4. Custom")
+
+    choice = input("Choose option (1-4): ").strip()
+
+    if choice == "1":
+        return "us"
+    elif choice == "2":
+        return "uk"
+    elif choice == "3":
+        return "in"
+    elif choice == "4":
+        return input("Enter custom layout (e.g. de, fr): ").strip()
+    else:
+        print("Invalid choice. Defaulting to 'us'")
+        return "us"
+
 def create_user():
     print("\n=== User Setup ===")
 
@@ -105,8 +164,7 @@ def create_user():
         "type": user_type
     }
 
-
-
+###
 def get_install_command(pkg, source):
     if source == "pacman":
         return f"sudo pacman -S --needed --noconfirm {pkg}"
@@ -119,7 +177,7 @@ def get_install_command(pkg, source):
 
 #
 #
-def simulate_install(profile, de, apps, user, execute=False):
+def simulate_install(profile, de, apps, user, timezone, keyboard, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
@@ -129,6 +187,9 @@ def simulate_install(profile, de, apps, user, execute=False):
     print(f"Creating user: {user['username']}")
     print(f"User type: {user['type']}")
     #
+    
+    print(f"Setting timezone: {timezone}")            
+    print(f"Setting keyboard layout: {keyboard}")
     
     # Profile handling
     if profile == "minimal":
@@ -185,6 +246,8 @@ def main():
         de = choose_de()
         apps = choose_apps()
     
+    timezone = choose_timezone()
+    keyboard = choose_keyboard()
     user = create_user()
         
     print("\n------------------------------")
@@ -192,15 +255,20 @@ def main():
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
     print(f"Apps: {apps}")
+    print(f"Keyboard: {keyboard}")
+    print(f"Timezone: {timezone}")
     print(f"User: {user['username']} ({user['type']})")
 
 
     ###
     print("\n=== Commands to be executed ===")
+
+    #KEYBOARD FIX TIME ADD
+    print(f"timedatectl set-timezone {timezone}")
+    print(f"loadkeys {keyboard}")
     
     # Preview DE install
     if de:
-        from installer.core.packages import DE_PACKAGES
         pkg = DE_PACKAGES.get(de)
         if pkg:
             print(f"sudo pacman -S --needed --noconfirm {pkg}")
@@ -227,12 +295,11 @@ def main():
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
-            simulate_install(profile, de, apps, user, execute=True)
+            simulate_install(profile, de, apps, user, timezone, keyboard, execute=True)
         else:
             print("Execution cancelled.")
     else:    
-        simulate_install(profile, de, apps, user, execute=False)
-    #
+        simulate_install(profile, de, apps, user, timezone, keyboard, execute=False)    #
   
 if __name__ == "__main__":
     main()
