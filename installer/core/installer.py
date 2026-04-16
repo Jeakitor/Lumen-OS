@@ -122,8 +122,8 @@ def choose_timezone():
         return "Europe/London"
     elif choice == "3":
         return "America/New_York"
-    else:
-        #timezones fetch lines:
+    elif choice == "4":
+        # Valid input
         zones = subprocess.check_output(
             "timedatectl list-timezones",
             shell=True
@@ -136,6 +136,9 @@ def choose_timezone():
                 return tz
             else:
                 print("Invalid timezone. Try again.")
+    else:
+        print("Invalid choice. Defaulting to Asia/Kolkata.")
+        return "Asia/Kolkata"
 
 def get_install_command(pkg, source):
     if source == "pacman":
