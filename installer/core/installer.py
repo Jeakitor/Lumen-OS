@@ -107,12 +107,35 @@ def create_user():
 ###
 def choose_timezone():
     print("\n=== Timezone Setup ===")
-    print("Example: Asia/Kolkata, Europe/London, America/New_York")
 
-    timezone = input("Enter your timezone: ").strip()
+    print("Common options:")
+    print("1. Asia/Kolkata")
+    print("2. Europe/London")
+    print("3. America/New_York")
+    print("4. Custom")
 
-    return timezone
+    choice = input("Choose option (1-4): ").strip()
 
+    if choice == "1":
+        return "Asia/Kolkata"
+    elif choice == "2":
+        return "Europe/London"
+    elif choice == "3":
+        return "America/New_York"
+    else:
+        #timezones fetch lines:
+        zones = subprocess.check_output(
+            "timedatectl list-timezones",
+            shell=True
+        ).decode().split("\n")
+
+        while True:
+            tz = input("Enter custom timezone: ").strip()
+
+            if tz in zones:
+                return tz
+            else:
+                print("Invalid timezone. Try again.")
 
 def get_install_command(pkg, source):
     if source == "pacman":
