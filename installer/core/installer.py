@@ -194,7 +194,7 @@ def choose_disk():
 
 #
 #
-def simulate_install(profile, de, apps, user, timezone, keyboard, execute=False):
+def simulate_install(profile, de, apps, user, timezone, keyboard, disk_mode, execute=False):
     print("\n=== Installation Plan ===")
 
     # Base system
