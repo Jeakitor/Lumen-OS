@@ -175,6 +175,23 @@ def get_install_command(pkg, source):
     else:
         return f"# Unknown source for {pkg}"
 
+
+def choose_disk():
+    print("\n=== Disk Setup ===")
+
+    print("1. Use entire disk (automatic)")
+    print("2. Manual partitioning (not implemented)")
+
+    choice = input("Choose option (1-2): ").strip()
+
+    if choice == "1":
+        return "auto"
+    elif choice == "2":
+        return "manual"
+    else:
+        print("Invalid choice. Defaulting to automatic.")
+        return "auto"
+
 #
 #
 def simulate_install(profile, de, apps, user, timezone, keyboard, execute=False):
@@ -226,6 +243,14 @@ def simulate_install(profile, de, apps, user, timezone, keyboard, execute=False)
         print("No additional applications selected")
 #
 
+    print(f"Disk setup mode: {disk_mode}")
+    
+    if disk_mode == "auto":
+        print("Partitioning disk automatically...")
+    else:
+        print("Manual partitioning selected (not implemented)")
+
+
 def main():
     setup_logger()
     log("Installer started")
@@ -249,6 +274,7 @@ def main():
     timezone = choose_timezone()
     keyboard = choose_keyboard()
     user = create_user()
+    disk_mode = choose_disk()
         
     print("\n------------------------------")
     print("\n=== Installation Summary ===")
@@ -257,6 +283,7 @@ def main():
     print(f"Apps: {apps}")
     print(f"Keyboard: {keyboard}")
     print(f"Timezone: {timezone}")
+    print(f"Disk Mode: {disk_mode}")
     print(f"User: {user['username']} ({user['type']})")
 
 
@@ -295,11 +322,10 @@ def main():
     if mode == "2":
         confirm = input("\n This will run real install commands. Continue? (y/n): ").lower()
         if confirm == "y":
-            simulate_install(profile, de, apps, user, timezone, keyboard, execute=True)
+            simulate_install(profile, de, apps, user, timezone, keyboard, disk_mode, execute=True)
         else:
             print("Execution cancelled.")
     else:    
-        simulate_install(profile, de, apps, user, timezone, keyboard, execute=False)    #
-  
+        simulate_install(profile, de, apps, user, timezone, keyboard, disk_mode, execute=False)  
 if __name__ == "__main__":
     main()
