@@ -82,37 +82,35 @@ def choose_apps():
 def choose_timezone():
     print("\n=== Timezone Setup ===")
 
-    print("Common options:")
-    print("1. Asia/Kolkata")
-    print("2. Europe/London")
-    print("3. America/New_York")
-    print("4. Custom")
+    zones = subprocess.check_output(
+        "timedatectl list-timezones",
+        shell=True
+    ).decode().split("\n")
 
-    choice = input("Choose option (1-4): ").strip()
+    while True:
+        print("Common options:")
+        print("1. Asia/Kolkata")
+        print("2. Europe/London")
+        print("3. America/New_York")
+        print("4. Custom")
 
-    if choice == "1":
-        return "Asia/Kolkata"
-    elif choice == "2":
-        return "Europe/London"
-    elif choice == "3":
-        return "America/New_York"
-    elif choice == "4":
-        # Valid input
-        zones = subprocess.check_output(
-            "timedatectl list-timezones",
-            shell=True
-        ).decode().split("\n")
+        choice = input("Choose option (1-4): ").strip()
 
-        while True:
-            tz = input("Enter custom timezone: ").strip()
-
-            if tz in zones:
-                return tz
-            else:
-                print("Invalid timezone. Try again.")
-    else:
-        print("Invalid choice. Defaulting to Asia/Kolkata.")
-        return "Asia/Kolkata"
+        if choice == "1":
+            return "Asia/Kolkata"
+        elif choice == "2":
+            return "Europe/London"
+        elif choice == "3":
+            return "America/New_York"
+        elif choice == "4":
+            while True:
+                tz = input("Enter custom timezone: ").strip()
+                if tz in zones:
+                    return tz
+                else:
+                    print("Invalid timezone. Try again.")
+        else:
+            print("Invalid choice. Please enter 1-4.\n")
 
 def choose_keyboard():
     print("\n=== Keyboard Layout Setup ===")
