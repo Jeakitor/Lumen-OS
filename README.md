@@ -4,13 +4,13 @@ A lightweight, student-focused Linux distribution designed to provide a simple, 
 
 ---
 
-## --Project Goal
+## -- Project Goal
 
 Lumen OS aims to make Linux more accessible to students by reducing complexity, improving performance on older systems, and allowing users to tailor their environment based on their needs.
 
 ---
 
-## --Key Features
+## -- Key Features
 
 - Lightweight and optimized for low-spec hardware
 - Student-focused system design
@@ -23,7 +23,7 @@ Lumen OS aims to make Linux more accessible to students by reducing complexity, 
 
 ---
 
-## --Installer System
+## -- Installer System
 
 Lumen OS includes a modular CLI-based installer that allows users to:
 
@@ -35,7 +35,7 @@ This ensures flexibility while maintaining system stability.
 
 ---
 
-## --Design Approach
+## -- Design Approach
 
 The system follows a modular architecture:
 
@@ -48,13 +48,13 @@ This allows:
 
 ---
 
-## --Current Status
+## -- Current Status
 
 This project is in active development. Core installer functionality has been implemented and tested.
 
 ---
 
-## --Running the Installer (Development)
+## -- Running the Installer (Development)
 
 ```bash
 python -m installer.core.installer
