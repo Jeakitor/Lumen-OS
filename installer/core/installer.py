@@ -252,6 +252,10 @@ def simulate_install(profile, de, apps, user, timezone, keyboard, disk_mode, exe
 
 
 def main():
+    ##
+    print("\n==============================")
+    print("     LUMEN OS INSTALLER")
+    print("==============================")
     setup_logger()
     log("Installer started")
     print("Lumen OS Installer starting...")
@@ -276,7 +280,7 @@ def main():
     user = create_user()
     disk_mode = choose_disk()
         
-    print("\n------------------------------")
+    print("\n==============================")
     print("\n=== Installation Summary ===")
     print(f"Profile: {profile}")
     print(f"Desktop Environment: {de}")
@@ -288,6 +292,7 @@ def main():
 
 
     ###
+    print("\nThis installer will now apply your configuration:")
     print("\n=== Commands to be executed ===")
 
     #KEYBOARD FIX TIME ADD
