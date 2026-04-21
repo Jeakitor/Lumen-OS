@@ -90,7 +90,7 @@
 **Result:** Pass
 
 <img width="544" height="147" alt="image" src="https://github.com/user-attachments/assets/413946ca-4327-4c53-9c09-2d46a2747e4c" />
-*Since I adlready had a bunch of programs pre-installed on arch and didnt want to install Debian tools I canceled the install. But don't worry the commands did run successfully :D*
+**Note:** The installation process was manually stopped after command execution began in order to prevent unintended changes to the system. However, the successful initiation of command execution confirms that the system correctly transitions from simulation mode to execution mode.
 
 ---
 
