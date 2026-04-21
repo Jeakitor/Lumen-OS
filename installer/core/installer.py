@@ -5,6 +5,7 @@ import subprocess
 #
 from installer.core.packages import PACKAGE_MAP, DE_PACKAGES
 import getpass
+import os
 
 
 
@@ -31,6 +32,14 @@ def choose_profile():
         else:
             print("Invalid input. Please enter 1 or 2.")
 
+
+def detect_package_manager():
+    if os.path.exists("/etc/arch-release"):
+        return "pacman"
+    elif os.path.exists("/etc/debian_version"):
+        return "apt"
+    else:
+        return "unknown"
 
 def choose_de():
     print("\nChoose Desktop Environment:")
@@ -82,37 +91,35 @@ def choose_apps():
 def choose_timezone():
     print("\n=== Timezone Setup ===")
 
-    print("Common options:")
-    print("1. Asia/Kolkata")
-    print("2. Europe/London")
-    print("3. America/New_York")
-    print("4. Custom")
+    zones = subprocess.check_output(
+        "timedatectl list-timezones",
+        shell=True
+    ).decode().split("\n")
 
-    choice = input("Choose option (1-4): ").strip()
+    while True:
+        print("Common options:")
+        print("1. Asia/Kolkata")
+        print("2. Europe/London")
+        print("3. America/New_York")
+        print("4. Custom")
 
-    if choice == "1":
-        return "Asia/Kolkata"
-    elif choice == "2":
-        return "Europe/London"
-    elif choice == "3":
-        return "America/New_York"
-    elif choice == "4":
-        # Valid input
-        zones = subprocess.check_output(
-            "timedatectl list-timezones",
-            shell=True
-        ).decode().split("\n")
+        choice = input("Choose option (1-4): ").strip()
 
-        while True:
-            tz = input("Enter custom timezone: ").strip()
-
-            if tz in zones:
-                return tz
-            else:
-                print("Invalid timezone. Try again.")
-    else:
-        print("Invalid choice. Defaulting to Asia/Kolkata.")
-        return "Asia/Kolkata"
+        if choice == "1":
+            return "Asia/Kolkata"
+        elif choice == "2":
+            return "Europe/London"
+        elif choice == "3":
+            return "America/New_York"
+        elif choice == "4":
+            while True:
+                tz = input("Enter custom timezone: ").strip()
+                if tz in zones:
+                    return tz
+                else:
+                    print("Invalid timezone. Try again.")
+        else:
+            print("Invalid choice. Please enter 1-4.\n")
 
 def choose_keyboard():
     print("\n=== Keyboard Layout Setup ===")
@@ -168,6 +175,8 @@ def create_user():
 def get_install_command(pkg, source):
     if source == "pacman":
         return f"sudo pacman -S --needed --noconfirm {pkg}"
+    elif source == "apt":
+        return f"sudo apt install -y {pkg}"
     elif source == "aur":
         return f"yay -S --noconfirm {pkg}"
     elif source == "flatpak":
@@ -192,56 +201,66 @@ def choose_disk():
         print("Invalid choice. Defaulting to automatic.")
         return "auto"
 
-#
+
 #
 def simulate_install(profile, de, apps, user, timezone, keyboard, disk_mode, execute=False):
+    pm = detect_package_manager()
+
     print("\n=== Installation Plan ===")
-
-    # Base system
     print("Installing base system...")
-
-    #USERS
-    print(f"Creating user: {user['username']}")
-    print(f"User type: {user['type']}")
-    #
-    
-    print(f"Setting timezone: {timezone}")            
-    print(f"Setting keyboard layout: {keyboard}")
-    
-    # Profile handling
-    if profile == "minimal":
-        print("Minimal setup: no extra packages")
 
     # Desktop Environment
     if de:
-        pkg = DE_PACKAGES.get(de)
+        pkg = DE_PACKAGES.get(de, {}).get(pm)
+
         if pkg:
-            cmd = f"sudo pacman -S --needed --noconfirm {pkg}"
-    
+            cmd = get_install_command(pkg, pm)
+
             if execute:
                 subprocess.run(cmd, shell=True)
             else:
                 print(f" - {cmd}")
+        else:
+            print(f" - No package found for DE: {de}")
+
     # Applications
     if apps:
         print("Installing selected applications:")
+
         for app in apps:
-            data = PACKAGE_MAP.get(app)
-    
-            if data:
-                pkg = data["package"]
-                src = data["source"]
-                cmd = get_install_command(pkg, src)
-    
+            pkg = PACKAGE_MAP.get(app, {}).get(pm)
+
+            if pkg:
+                cmd = get_install_command(pkg, pm)
+
                 if execute:
                     subprocess.run(cmd, shell=True)
                 else:
                     print(f" - {cmd}")
             else:
-                print(f" - Unknown app: {app}")
+                print(f" - No package found for app: {app}")
     else:
         print("No additional applications selected")
-#
+
+    # User
+    print(f"Creating user: {user['username']}")
+    print(f"User type: {user['type']}")
+
+    # System config
+    print(f"Setting timezone: {timezone}")
+    print(f"Setting keyboard layout: {keyboard}")
+
+    # Profile
+    if profile == "minimal":
+        print("Minimal setup: no extra packages")
+
+    # Disk
+    print(f"Disk setup mode: {disk_mode}")
+
+    if disk_mode == "auto":
+        print("Partitioning disk automatically...")
+    else:
+        print("Manual partitioning selected (not implemented)")
 
     print(f"Disk setup mode: {disk_mode}")
     
@@ -266,6 +285,7 @@ def main():
     for key, value in hardware.items():
         print(f"{key.upper()}: {value}")
 
+    pm = detect_package_manager()
     profile = choose_profile()
     
     if profile == "minimal":
@@ -299,21 +319,17 @@ def main():
     print(f"timedatectl set-timezone {timezone}")
     print(f"loadkeys {keyboard}")
     
-    # Preview DE install
+    # Preview DE install, implemented with abstraction 20th april
     if de:
-        pkg = DE_PACKAGES.get(de)
-        if pkg:
-            print(f"sudo pacman -S --needed --noconfirm {pkg}")
-    
-    # Preview app installs
+         pkg = DE_PACKAGES.get(de, {}).get(pm)
+    if pkg:
+        print(get_install_command(pkg, pm))
+
     for app in apps:
-        data = PACKAGE_MAP.get(app)
-        if data:
-            cmd = get_install_command(data["package"], data["source"])
-            print(cmd)
-
-    ###
-
+        pkg = PACKAGE_MAP.get(app, {}).get(pm)
+        if pkg:
+            print(get_install_command(pkg, pm))
+        
     
     log(f"Final selection → Profile: {profile}, DE: {de}, Apps: {apps}")
 

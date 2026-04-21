@@ -25,3 +25,13 @@ DE_PACKAGES = {
     "kde": "plasma kde-applications",
     "gnome": "gnome"
 }
+
+def get_install_command(pkg, manager):
+    if manager == "pacman":
+        return f"sudo pacman -S --needed --noconfirm {pkg}"
+    elif manager == "apt":
+        return f"sudo apt install -y {pkg}"
+    else:
+        return f"# Unknown package manager for {pkg}"
+
+#ARCH PACMAN USED ONLY FOR WHEN TESTING
