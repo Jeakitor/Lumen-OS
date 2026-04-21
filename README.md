@@ -1,60 +1,72 @@
 # Lumen OS
 
-A lightweight, student-focused Linux distribution designed to provide a simple, efficient, and customizable experience on low-spec hardware.
+Lumen OS is a lightweight, student-focused Linux system designed to simplify installation and improve usability on low-spec hardware.
 
 ---
 
-## -- Project Goal
+## Overview
+
+This repository contains the development of a modular Linux installation system that allows users to configure their environment before installation. The system focuses on accessibility, safety, and flexibility.
+
+---
+
+## Project Goal
 
 Lumen OS aims to make Linux more accessible to students by reducing complexity, improving performance on older systems, and allowing users to tailor their environment based on their needs.
 
 ---
 
-## -- Key Features
+## Key Features
 
 - Lightweight and optimized for low-spec hardware
-- Student-focused system design
-- Customizable installation process
+- Profile-based installation (Minimal / Standard)
 - Desktop environment selection (XFCE, KDE, GNOME)
 - Application selection during setup
-- Secure user configuration
-- Timezone and keyboard setup
-- Safe installation simulation mode
+- Timezone and keyboard configuration
+- Secure user creation
+- Disk setup (simulated)
+- Simulation and execution modes
+- Package management abstraction
 
 ---
 
-## -- Installer System
+## Installer System
 
-Lumen OS includes a modular CLI-based installer that allows users to:
+The system includes a modular CLI-based installer that:
 
-- Configure system settings before installation
-- Preview installation steps safely
-- Execute installation based on selected options
-
-This ensures flexibility while maintaining system stability.
-
----
-
-## -- Design Approach
-
-The system follows a modular architecture:
-
-User Input → Processing → System Mapping → Execution
-
-This allows:
-- safer installation workflows
-- easier customization
-- future expansion (TUI/GUI support)
+- guides users through configuration
+- validates input
+- maps selections to system commands
+- supports simulation before execution
 
 ---
 
-## -- Current Status
+## IB Computer Science Internal Assessment
 
-This project is in active development. Core installer functionality has been implemented and tested.
+This project was developed as part of an IB Computer Science Internal Assessment.
+
+The IA submission corresponds to the CLI-based installer contained in the `final-ia` branch of this repository.
+
+Within that branch, the relevant components are:
+
+- `installer/core/` — Core installer logic
+- `docs/` — Design, testing, and evaluation documentation
+
+The IA version reflects a stable implementation of the system at the time of submission.
 
 ---
 
-## -- Running the Installer (Development)
+## System Design
+
+The installer follows a structured architecture:
+
+User Input → Processing → Command Mapping → Execution
+
+This design separates configuration logic from system execution, allowing flexibility and future expansion.
+
+---
+
+## Running the Installer
 
 ```bash
 python -m installer.core.installer

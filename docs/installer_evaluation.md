@@ -43,8 +43,8 @@ The system was evaluated against the defined success criteria.
 
 ## Strengths
 - The system's modular layout divides user input, processing, and execution.
-- Compatibility between various Linux distributions is made possible via package management abstraction.
-- By enabling users to confirm activities before to execution, the simulation mode enhances safety.
+- Compatibility across different Linux distributions is achieved through package management abstraction.
+- By enabling users to confirm actions before execution, the simulation mode enhances safety.
 - Reliability is increased with input validation, such as time zone and password confirmation.
 - For non-technical users, the installation offers a straightforward, guided approach.
 
