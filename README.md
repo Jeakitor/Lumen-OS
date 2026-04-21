@@ -14,9 +14,12 @@ This repository contains the development of a modular Linux installation system 
 
 This project was developed as part of an IB Computer Science Internal Assessment.
 
-The IA submission corresponds to the core CLI-based installer located in:
+The IA submission corresponds to the CLI-based installer contained in the `final-ia` branch of this repository.
 
-- `installer/core/`
+Within that branch, the relevant components are:
+
+- `installer/core/` — Core installer logic
+- `docs/` — Design, testing, and evaluation documentation
 
 The following features are included in the IA scope:
 
@@ -30,11 +33,7 @@ The following features are included in the IA scope:
 - Simulation and execution modes
 - Package management abstraction
 
-Supporting documentation for the IA can be found in:
-
-- `docs/installer_design.md`
-- `docs/testing.md`
-- `docs/evaluation.md`
+The IA version reflects a stable implementation of the installer at the time of submission.
 
 ---
 
