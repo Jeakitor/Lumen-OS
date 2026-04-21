@@ -10,6 +10,37 @@ This repository contains the development of a modular Linux installation system 
 
 ---
 
+## Project Goal
+
+Lumen OS aims to make Linux more accessible to students by reducing complexity, improving performance on older systems, and allowing users to tailor their environment based on their needs.
+
+---
+
+## Key Features
+
+- Lightweight and optimized for low-spec hardware
+- Profile-based installation (Minimal / Standard)
+- Desktop environment selection (XFCE, KDE, GNOME)
+- Application selection during setup
+- Timezone and keyboard configuration
+- Secure user creation
+- Disk setup (simulated)
+- Simulation and execution modes
+- Package management abstraction
+
+---
+
+## Installer System
+
+The system includes a modular CLI-based installer that:
+
+- guides users through configuration
+- validates input
+- maps selections to system commands
+- supports simulation before execution
+
+---
+
 ## IB Computer Science Internal Assessment
 
 This project was developed as part of an IB Computer Science Internal Assessment.
@@ -21,19 +52,7 @@ Within that branch, the relevant components are:
 - `installer/core/` — Core installer logic
 - `docs/` — Design, testing, and evaluation documentation
 
-The following features are included in the IA scope:
-
-- Hardware detection
-- Profile-based installation (Minimal / Standard)
-- Desktop environment selection
-- Application selection
-- Timezone and keyboard configuration
-- User creation
-- Disk setup (simulated)
-- Simulation and execution modes
-- Package management abstraction
-
-The IA version reflects a stable implementation of the installer at the time of submission.
+The IA version reflects a stable implementation of the system at the time of submission.
 
 ---
 
