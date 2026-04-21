@@ -65,7 +65,7 @@ The installer allows users to choose applications based on their needs.
 Applications are managed using a mapping system:
 
 - Each app is linked to a package name
-- Each package includes its installation source (pacman, AUR, flatpak)
+- Each package is mapped based on the detected package manager (e.g., apt, pacman), allowing cross-distribution compatibility.
 
 This abstraction allows the system to support multiple package sources without changing core logic.
 

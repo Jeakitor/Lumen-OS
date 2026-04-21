@@ -1,5 +1,7 @@
 # Testing
-*Please note that the following tests were conducted on my own Arch Linux build as a tester for the basic installer program*
+## Testing Overview
+
+The following tests were conducted on an Arch Linux system to evaluate the functionality and reliability of the installer. Each test verifies system behavior against expected outcomes, with evidence provided through screenshots.
 ## Test 1: Hardware Detection
 **Input:** Run installer on target machine  
 **Expected:** CPU, architecture, and RAM are displayed  
