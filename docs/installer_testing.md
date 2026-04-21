@@ -8,7 +8,7 @@
 
 <img width="700" height="268" alt="image" src="https://github.com/user-attachments/assets/a56ef99d-7bb3-4702-ad97-68fd6b49c806" />
 
----
+--- 
 
 ## Test 2: Profile Selection
 **Input:** Choose Minimal  
